@@ -1,19 +1,51 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { 
+    Text, 
+    TouchableWithoutFeedback, 
+    View,
+    LayoutAnimation
+} from 'react-native';
+import { connect } from 'react-redux';
 import { CardSection } from './common';
+import * as actions from '../actions/index';
 
 class ListItem extends Component {
     
+    componentWillUpdate() {
+        LayoutAnimation.spring();
+    }
+
+    renderDescription() {
+        const { library, expanded } = this.props;
+
+        if (expanded) {
+            return (
+                <CardSection>
+                    <Text style={{ flex: 1 }}>
+                        {library.item.description}
+                    </Text>
+                </CardSection>
+            );
+        }
+    }
+
     render() {
         const { titleStyle } = styles;
-        const { title } = this.props.library.item;
+        const { id, title } = this.props.library.item;
 
         return (
-            <CardSection>
-                <Text style={titleStyle}>
-                    {title}
-                </Text>
-            </CardSection>
+            <TouchableWithoutFeedback
+                onPress={() => this.props.selectLibrary(id)}
+            >
+                <View>
+                    <CardSection>
+                        <Text style={titleStyle}>
+                            {title}
+                        </Text>
+                    </CardSection>
+                    {this.renderDescription()}
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }
@@ -25,4 +57,11 @@ const styles = {
     }
 }
 
-export default ListItem;
+// ownProps is a reference to this.props on this component
+const mapStateToProps = (state, ownProps) => {
+    const expanded = (state.selectedLibraryId) === ownProps.library.item.id;
+
+    return { expanded };
+};
+
+export default connect(mapStateToProps, actions)(ListItem);

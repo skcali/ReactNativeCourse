@@ -7,7 +7,7 @@ class LibraryList extends Component {
     
     keyExtractor = (item, index) => item.id.toString();
 
-    renderRow = ( library ) => (
+    renderRow = (library) => (
         <ListItem library={library} />
     );
         
