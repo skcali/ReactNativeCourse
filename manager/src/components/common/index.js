@@ -1,4 +1,5 @@
-export * from './Button';
+export * from './ButtonText';
+export * from './ButtonImage';
 export * from './Card';
 export * from './CardSection';
 export * from './Header';
