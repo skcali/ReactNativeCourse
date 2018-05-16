@@ -10,7 +10,7 @@ const Router = createStackNavigator(
         EmployeeCreate: { screen: EmployeeCreate }
     },
     {
-        initialRouteName: 'Login'
+        initialRouteName: 'EmployeeList'
     }
 );
 
