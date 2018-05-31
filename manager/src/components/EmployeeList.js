@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { ScrollView } from 'react-native';
+import _ from 'lodash';
 import { ButtonImage } from './common';
+import ListItem from './ListItem';
 import { AddIcon } from '../image';
+import { employeesFetch } from '../actions';
 
 class EmployeeList extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -13,19 +17,34 @@ class EmployeeList extends Component {
         />
     });
 
+    componentWillMount() {
+        this.props.employeesFetch();
+    }
+
+    createDataSource() {
+        const { employees, navigation } = this.props;
+
+        return employees.map(employee => 
+            <ListItem employee={employee} navigation={navigation} />
+        );
+    }
+
     render() {
         return (
-            <View>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-                <Text>Employee List</Text>
-            </View>
+            <ScrollView>
+                {this.createDataSource()}
+            </ScrollView>
         );
     }
 }
 
-export default EmployeeList;
+const mapStateToProps = (state) => {
+    const employees = _.map(state.employees, (val, uid) => {
+        // { shift: '', name: '', phone: '', uid: '' }
+        return { ...val, uid };
+    });
+
+    return { employees };
+};
+
+export default connect(mapStateToProps, { employeesFetch })(EmployeeList);
